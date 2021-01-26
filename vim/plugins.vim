@@ -65,6 +65,12 @@ Plug 'unblevable/quick-scope'
 Plug 'JamshedVesuna/vim-markdown-preview'
 Plug 'supercrabtree/vim-resurrect'
 
+Plug 'rhysd/vim-clang-format'
+Plug 'Chiel92/vim-autoformat'
+
+" Spell check
+" Plug 'kamykn/spelunker.vim'
+
 " Plug 'vim-syntastic/syntastic'
 " Plugin outside ~/.vim/plugged with post-update hook
 "Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -76,6 +82,7 @@ Plug 'junegunn/vim-easy-align'
 
 " Plug 'w0rp/ale'
 Plug 'vim-scripts/headerguard'
+Plug 'ericcurtin/CurtineIncSw.vim'
 
 " Autocomplete
 " Plug 'zxqfl/tabnine-vim'
@@ -390,13 +397,15 @@ set completeopt=noinsert,menuone,noselect
 " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Latex specific
-autocmd BufWritePost *.tex :AsyncRun pdflatex *.tex
+autocmd BufWritePost *.tex :AsyncRun pdflatex --output-directory=/tmp *.tex
 " if has('nvim')
 "     let g:vimtex_compiler_progname = 'nvr'
 " end
 
 " Disable folds
 let g:Tex_Folding = 0
+let g:Tex_DefaultTargetFormat = 'pdf' " doesn't work
+let g:Tex_CompileRule_pdf = 1
 
 " runtime plugin/RainbowParenthsis.vim 
 "Color Schemes
@@ -411,6 +420,28 @@ let vim_markdown_preview_toggle=1
 
 let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
 let g:UltiSnipsEditSplit="vertical"
+
+
+"===============================================================================
+" AUTO-FORMATTING
+"===============================================================================
+" Automatically format c-family files with clang
+" let g:clang_format#auto_format = 1
+" autocmd FileType cpp,c ClangFormatAutoEnable
+
+" Manually format python files with Autoformat
+nnoremap <C-F5> :Autoformat<Cr>
+nnoremap <F5> :let g:autoformat_verbosemode=1<CR>:Autoformat<CR>:let g:autoformat_verbosemode=0<CR>
+
+let my_filetypes = ['bzl', 'c', 'cpp']
+autocmd BufWrite * if index(my_filetypes, &ft) >= 0 | :Autoformat
+let g:formatterpath = ['/usr/local/bin/']
+let g:formatters_python = ['black']
+let g:formatdef_buildifier = '"buildifier -type=build"'
+let g:formatters_bzl = ['buildifier']
+let g:autoformat_autoindent = 0
+let g:autoformat_retab = 0
+let g:autoformat_remove_trailing_spaces = 0
 
 "===============================================================================
 " VIM-RESURRECT

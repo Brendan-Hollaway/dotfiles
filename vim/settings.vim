@@ -7,10 +7,13 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set expandtab " use spaces instead of tabs.
-set smarttab " let's tab key insert 'tab stops', and bksp deletes tabs.
+set smarttab " let's tab key insert 'tab stops', and backspace deletes tabs.
 set shiftround " tab / shifting moves to closest tabstop.
 set autoindent " Match indents on new lines.
-set cindent " Intellegently dedent / indent new lines based on rules.
+set cindent " Intelligently dedent / indent new lines based on rules.
+
+" Turn on spell check!
+autocmd Filetype python,cpp,c setlocal spell
 
 " if $MOBILE_ROBOTICS_MODE_ENABLED
 "     autocmd Filetype python setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
@@ -78,7 +81,7 @@ set mouse=a
 " Set 3 lines to the cursor - when moving vertically using j/k
 set so=4
 
-" Turn on the WiLd menu
+" Turn on the Wild menu
 set wildmenu
 set wildmode=list:longest,full
 
@@ -101,7 +104,7 @@ set whichwrap+=<,>,h,l,[,]
 " No idea what this does
 set nostartofline
 
-" List the tab spaces and trailing charaters as below
+" List the tab spaces and trailing characters as below
 set list
 " set listchars=tab:»·,trail:·
 " set listchars=tab:»·,eol:¬,trail:·,extends:↪,precedes:↩
@@ -269,8 +272,15 @@ end
 set tags=tags;/
 
 " Highlight text > 80 characters as red, but only in ocaml
-au Filetype ocaml highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-au Filetype ocaml match OverLength /\%81v.\+/
+" au Filetype ocaml highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+" au Filetype ocaml match OverLength /\%81v.\+/
+
+" TODO: Get working
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%101v.\+/
+
+" let &colorcolumn=join(range(101,999),",")
+
 " if &filetype ==# 'ocaml'
 "     :echom "should work"
 " else

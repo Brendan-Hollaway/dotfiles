@@ -37,6 +37,7 @@ map <ESC>[1;5A <C-Up>
 map <ESC>[1;5B <C-Down>
 map <ESC>[1;5C <C-Right>
 map <ESC>[1;5D <C-Left>
+map <ESC>[15;5~ <C-F5>
 
 " Fix my arrow keys
 " map! <ESC>[A <C-Up>
@@ -64,8 +65,10 @@ inoremap <C-Right> <Esc><Right>wi
 nnoremap <space> /
 nnoremap <c-space> ?
 
+" Disable spellcheck when <leader><cr> is pressed
+nnoremap <silent> <leader><cr> :set nospell<cr>
 " Disable highlight when <leader><cr> is pressed
-nnoremap <silent> <leader><cr> :noh<cr>
+nnoremap <silent> <leader><leader><cr> :noh<cr>
 
 " Smart way to move between windows
 nnoremap <C-j> <C-W>j
@@ -105,10 +108,17 @@ nnoremap <Cr> o<Esc>
 " Ctrl + o - up one level
 " Ctrl + i - down one level
 nnoremap <C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-nnoremap <C-]> :tabe <CR>:exec("tag ".expand("<cword>"))<CR>
-" nnoremap <A-\> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
+" Explanation - Copy the current word into the register `z`, then open the
+" current buffer into a new tab, then jump to the tag stored in `z` -- the
+" word we were highlighted over. AKA Open the current word's definition in a
+" new tab!
+nnoremap <C-]> :let @z=expand("<cword>")<CR>: tabe <C-r>%<CR>: tag <C-r>z<CR>
+" nnoremap <C-[> :e <CR>:exec("tag ".expand("<cword>"))<CR>
+nnoremap <Leader><C-\> :exec("tag ".expand("<cword>"))<CR>
 " nnoremap <A-LeftMouse> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 " nnoremap <A-RightMouse> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
+nnoremap <Leader>; :call CurtineIncSw()<CR>
+nnoremap <Leader><Leader>; :vsp <CR>:call CurtineIncSw()<CR>
 
 " Press Alt+u to convert current word to uppercase
 inoremap <A-u> <Esc>viwUi
@@ -117,8 +127,8 @@ inoremap <A-l> <Esc>viwui
 nnoremap <A-u> viwU
 nnoremap <A-l> viwu
 
-"Remove all trailing whitespace by pressing F5
-nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
+" OUTDATED(now in plugins as Autoformat): Remove all trailing whitespace by pressing F5 
+" nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
 " Quickly open VIMRC in a vertical split
 nnoremap <leader>ev :tabe $MYVIMRC<Cr>
@@ -135,6 +145,8 @@ nnoremap <A-r> mzyiw:%s//\=@0/g<Cr>`z
 "   let marvim_store='~/.vim/marvim'
 " endif
 
+map <Leader>p :exec("!xdg-open /tmp/".expand('%:r').".pdf")<CR>
+
 nnoremap <Tab> :tabn<Cr>
 nnoremap <S-Tab> :tabp<Cr>
 
@@ -143,3 +155,21 @@ map <F6> :mksession! ~/.vim/sessions/last.session <cr>
 
 " And load session with F7
 map <F7> :source ~/.vim/sessions/last.session <cr>
+
+"(typing "#i" and space will be expanded to "#include")
+iabbrev #i #include
+" (typing "#d" and space will be expanded to "#define")
+iabbrev #d #define
+" Boston dynamics logging abreviations
+iabbrev bld VLOG(1) <<
+iabbrev blid VLOG_IF(1,
+iabbrev bli LOG(INFO) <<
+iabbrev blii LOG_IF(INFO,
+iabbrev blw LOG(WARNING) <<
+iabbrev bliw LOG_IF(WARNING,
+iabbrev ble LOG(ERROR) <<
+iabbrev blie LOG_IF(ERROR,
+iabbrev blf LOG(FATAL) <<
+iabbrev blif LOG_IF(FATAL,
+iabbrev todo TODO(bhollaway):
+iabbrev TODO TODO(bhollaway):
