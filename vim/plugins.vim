@@ -45,10 +45,11 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-obsession'
 
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
+" Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
 
@@ -65,8 +66,12 @@ Plug 'unblevable/quick-scope'
 Plug 'JamshedVesuna/vim-markdown-preview'
 Plug 'supercrabtree/vim-resurrect'
 
+" Autoformatters
 Plug 'rhysd/vim-clang-format'
 Plug 'Chiel92/vim-autoformat'
+
+" Fuzzy file finding
+Plug 'ctrlpvim/ctrlp.vim'
 
 " Spell check
 " Plug 'kamykn/spelunker.vim'
@@ -416,7 +421,7 @@ autocmd BufRead,BufNewFile *.launch setfiletype roslaunch
 
 " Use github-flavored markdown for rendering
 let vim_markdown_preview_github=1
-let vim_markdown_preview_toggle=1
+let vim_markdown_preview_toggle=2
 
 let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
 let g:UltiSnipsEditSplit="vertical"
@@ -433,15 +438,22 @@ let g:UltiSnipsEditSplit="vertical"
 nnoremap <C-F5> :Autoformat<Cr>
 nnoremap <F5> :let g:autoformat_verbosemode=1<CR>:Autoformat<CR>:let g:autoformat_verbosemode=0<CR>
 
-let my_filetypes = ['bzl', 'c', 'cpp']
-autocmd BufWrite * if index(my_filetypes, &ft) >= 0 | :Autoformat
+" let my_filetypes = ['bzl', 'c', 'cpp', 'go']
+let my_filetypes = ['bzl', 'go']
+let cpp_filetypes = ['c', 'cpp']
+autocmd BufWrite * if index(my_filetypes, &ft) >= 0 | :Autoformat | else | if index(cpp_filetypes, &ft) >= 0 | :ClangFormat
 let g:formatterpath = ['/usr/local/bin/']
-let g:formatters_python = ['black']
-let g:formatdef_buildifier = '"buildifier -type=build"'
-let g:formatters_bzl = ['buildifier']
 let g:autoformat_autoindent = 0
 let g:autoformat_retab = 0
 let g:autoformat_remove_trailing_spaces = 0
+" Bazel
+let g:formatters_bzl = ['buildifier']
+let g:formatdef_buildifier = '"buildifier -type=build"'
+" Go
+let g:formatters_go = ['gofmt']
+let g:formatdef_gofmt = '"gofmt"'
+" Python
+let g:formatters_python = ['black']
 
 "===============================================================================
 " VIM-RESURRECT
@@ -452,3 +464,18 @@ let g:resurrect_ignore_patterns = [
     \  '/undotree_2',
     \  '/__CtrlSF__'
     \]
+
+
+"===============================================================================
+" FINDING FILES -- CTRLPVIM/CTRLP.VIM
+"===============================================================================
+let g:ctrlp_max_files=0
+if executable('ag')
+  " Use Ag over Grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+endif
+let g:ctrlp_cmd='CtrlP /bdi/rt/robots/fleet'
+let g:ctrlp_working_path_mode = 'c'

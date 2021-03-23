@@ -13,6 +13,7 @@ set autoindent " Match indents on new lines.
 set cindent " Intelligently dedent / indent new lines based on rules.
 
 " Turn on spell check!
+" set spellfile=$HOME/.vim/spell/en.utf8.add
 autocmd Filetype python,cpp,c setlocal spell
 
 " if $MOBILE_ROBOTICS_MODE_ENABLED
@@ -21,10 +22,12 @@ autocmd Filetype python,cpp,c setlocal spell
 autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 " endif
 
-autocmd Filetype java   setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
-autocmd Filetype xml    setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype yaml   setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype ocaml  setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
+autocmd Filetype java   setlocal expandtab   tabstop=4 shiftwidth=4 softtabstop=4
+autocmd Filetype ocaml  setlocal expandtab   tabstop=4 shiftwidth=4 softtabstop=4
+autocmd Filetype go     setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4
+autocmd Filetype xml    setlocal expandtab   tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype yaml   setlocal expandtab   tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype sh     setlocal expandtab   tabstop=2 shiftwidth=2 softtabstop=2
 
 " Make vim windows resize when the window resizes
 autocmd VimResized * wincmd =
@@ -109,6 +112,9 @@ set list
 " set listchars=tab:»·,trail:·
 " set listchars=tab:»·,eol:¬,trail:·,extends:↪,precedes:↩
 set listchars=tab:»·,trail:·,extends:↪,precedes:↩
+" For go files, don't display tabs as the double arrows. Display them as
+" (escaped) spaces instead
+autocmd Filetype go     setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4 listchars=tab:\ \ ,trail:·,extends:↪,precedes:↩
 
 " Always show tabs (avoids frequent window resizing)
 set showtabline=2 
