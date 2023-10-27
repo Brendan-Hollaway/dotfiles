@@ -84,36 +84,30 @@ Plug 'junegunn/vim-easy-align'
 
 "Plug 'mattn/emmet-vim'
 "Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
 
 " Plug 'w0rp/ale'
 Plug 'vim-scripts/headerguard'
-Plug 'ericcurtin/CurtineIncSw.vim'
 
-" Autocomplete
-" Plug 'zxqfl/tabnine-vim'
-" Plug 'ncm2/ncm2'
-" Plug 'roxma/nvim-yarp'
-" Plug 'autozimu/LanguageClient-neovim', {
-"     \ 'branch': 'next',
-"     \ 'do': 'bash install.sh',
-"     \ }
+" Plugins for switching between header and cpp files
+" Plug 'ericcurtin/CurtineIncSw.vim'
+Plug 'vim-scripts/a.vim'
 
-" (Optional) Multi-entry selection UI.
-" Plug 'junegunn/fzf'
+" Add support for GN build files 
+Plug 'kalcutter/vim-gn'
 
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'Valloric/YouCompleteMe'
+Plug 'ycm-core/YouCompleteMe'
+Plug 'grailbio/bazel-compilation-database'
 
-" function! BuildYCM(info)
-"   " info is a dictionary with 3 fields
-"   " - name:   name of the plugin
-"   " - status: 'installed', 'updated', or 'unchanged'
-"   " - force:  set on PlugInstall! or PlugUpdate!
-"   if a:info.status == 'installed' || a:info.force
-"     !./install.py --clang-completer
-"   endif
-" endfunction
+Plug 'uarun/vim-protobuf'
 
-"Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+" File exploring in vim
+Plug 'preservim/nerdtree'
+" Adds icons for folders and files. Seems to slow things down tho
+" Plug 'ryanoasis/vim-devicons'
+
+Plug 'martinda/Jenkinsfile-vim-syntax'
 
 " Initialize plugin system
 call plug#end()
@@ -186,52 +180,69 @@ let g_cpp_experimental_template_highlight = 1
 "-------------------------------------------------------------------------------
 
 "===============================================================================
-" YouCompleteMe options
+" (YCM) YouCompleteMe options
 "===============================================================================
+" TODO(bhollaway): Temporarily disable YCM
+let g:loaded_youcompleteme = 1
 
-"let g:ycm_global_ycm_extra_conf = "~/.vim/config/ycm_extra_config.global.py"
-"let g:ycm_confirm_extra_conf = 1
-"let g:ycm_autoclose_preview_window_after_insertion = 1
+" let g:ycm_global_ycm_extra_conf = "~/.vim/config/ycm_extra_config.global.py"
+" let g:ycm_confirm_extra_conf = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
 
-"let g:Show_diagnostics_ui = 1 "default 1
+let g:Show_diagnostics_ui = 1 "default 1
 
-""will put icons in Vim's gutter on lines that have a diagnostic set.
-""Turning this off will also turn off the YcmErrorLine and YcmWarningLine
-""highlighting
-"let g:ycm_enable_diagnostic_signs = 1
-"let g:ycm_enable_diagnostic_highlighting = 0
-"let g:ycm_always_populate_location_list = 1 "default 0
-"let g:ycm_open_loclist_on_ycm_diags = 1 "default 1
-
-
-"let g:ycm_complete_in_strings = 1 "default 1
-"let g:ycm_collect_identifiers_from_tags_files = 0 "default 0
-"let g:ycm_path_to_python_interpreter = '' "default ''
+"will put icons in Vim's gutter on lines that have a diagnostic set.
+"Turning this off will also turn off the YcmErrorLine and YcmWarningLine
+"highlighting
+let g:ycm_enable_diagnostic_signs = 1
+let g:ycm_enable_diagnostic_highlighting = 0
+let g:ycm_always_populate_location_list = 1 "default 0
+let g:ycm_open_loclist_on_ycm_diags = 1 "default 1
 
 
-"let g:ycm_server_use_vim_stdout = 0 "default 0 (logging to console)
-"let g:ycm_server_log_level = 'info' "default info
+let g:ycm_complete_in_strings = 1 "default 1
+let g:ycm_collect_identifiers_from_tags_files = 0 "default 0
+let g:ycm_path_to_python_interpreter = '' "default ''
 
-"" Other options include [ 'same-buffer', 'horizontal-split', 'vertical-split', 'new-tab' ]
-"let g:ycm_goto_buffer_command = 'same-buffer' 
 
-"let g:ycm_filetype_whitelist = { '*': 1 }
-"let g:ycm_key_invoke_completion = '<C-Space>'
+let g:ycm_server_use_vim_stdout = 0 "default 0 (logging to console)
+let g:ycm_server_log_level = 'info' "default info
 
-"nnoremap <F11> :YcmForceCompileAndDiagnostics <CR>
+" Other options include [ 'same-buffer', 'horizontal-split', 'vertical-split', 'new-tab' ]
+let g:ycm_goto_buffer_command = 'same-buffer' 
 
-"let g:ycm_filetype_blacklist = {
-"  \ 'tagbar' : 1,
-"  \ 'qf' : 1,
-"  \ 'notes' : 1,
-"  \ 'markdown' : 1,
-"  \ 'unite' : 1,
-"  \ 'text' : 1,
-"  \ 'vimwiki' : 1,
-"  \ 'pandoc' : 1,
-"  \ 'infolog' : 1,
-"  \ 'mail' : 1
-"  \}
+let g:ycm_filetype_whitelist = { '*': 1 }
+let g:ycm_key_invoke_completion = '<C-Space>'
+
+nnoremap <F11> :YcmForceCompileAndDiagnostics <CR>
+
+let g:ycm_filetype_blacklist = {
+  \ 'tagbar' : 1,
+  \ 'qf' : 1,
+  \ 'notes' : 1,
+  \ 'markdown' : 1,
+  \ 'unite' : 1,
+  \ 'text' : 1,
+  \ 'vimwiki' : 1,
+  \ 'pandoc' : 1,
+  \ 'infolog' : 1,
+  \ 'mail' : 1
+  \}
+
+augroup MyYCMCustom
+  autocmd!
+  autocmd FileType c,cpp let b:ycm_hover = {
+    \ 'command': 'GetDoc',
+    \ 'syntax': &filetype
+    \ }
+augroup END
+
+let g:ycm_auto_hover=''
+let g:ycm_show_diagnostics_ui=1
+nmap <leader>D <plug>(YCMHover)
+" nnoremap <F1> :YcmCompleter FixIt <CR>
+" I don't think this works :(
+" nmap <F2> :let g:ycm_show_diagnostics_ui=!g:ycm_show_diagnostics_ui<CR>:echo g:ycm_show_diagnostics_ui<CR>
 
 "-------------------------------------------------------------------------------
 
@@ -357,7 +368,7 @@ let g:ale_c_clangtidy_checks = ['*', '-llvm-include-order', '-google-readability
 " EASYMOTION
 "===============================================================================
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
-map <Leader> <Plug>(easymotion-prefix)
+" map <Leader> <Plug>(easymotion-prefix)
 
 " <Leader>f{char} to move to {char}
 map  <Leader>f <Plug>(easymotion-bd-f)
@@ -373,15 +384,6 @@ nmap <Leader>L <Plug>(easymotion-overwin-line)
 " Move to word
 map  <Leader>w <Plug>(easymotion-bd-w)
 nmap <Leader>w <Plug>(easymotion-overwin-w)
-
-"===============================================================================
-" VIM-COMMENTARY
-"===============================================================================
-autocmd FileType matlab setlocal commentstring=\%\ %s
-" Comment using // for c++
-autocmd FileType c,cpp,cs,java,cfg setlocal commentstring=//\ %s
-autocmd FileType ocaml set commentstring=(*\ %s\ *)
-
 "===============================================================================
 " VIM-NCM2
 "===============================================================================
@@ -417,32 +419,60 @@ let g:Tex_CompileRule_pdf = 1
 silent colorscheme molokai
 hi Visual term=reverse cterm=reverse
 
-autocmd BufRead,BufNewFile *.launch setfiletype roslaunch
-
 " Use github-flavored markdown for rendering
 let vim_markdown_preview_github=1
-let vim_markdown_preview_toggle=2
+" 0 means use a hotkey to render the file in a browser
+let vim_markdown_preview_toggle=0
+" press f4 to view markdown
+let vim_markdown_preview_hotkey='<F4>'
+
+
+
+" don't remove file after rendering
+let vim_markdown_preview_temp_file=0
 
 let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/UltiSnips', 'UltiSnips']
 let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsExpandTrigger="<F1>"
+let g:UltiSnipsJumpForwardTrigger="<leader>n"
+let g:UltiSnipsJumpBackwardTrigger="<leader>p"
+let g:ultisnips_python_style="doxygen"
 
 
 "===============================================================================
 " AUTO-FORMATTING
 "===============================================================================
-" Automatically format c-family files with clang
-" let g:clang_format#auto_format = 1
-" autocmd FileType cpp,c ClangFormatAutoEnable
-
-" Manually format python files with Autoformat
+" Manually call Autoformat
 nnoremap <C-F5> :Autoformat<Cr>
+" Autoformat, but verbose -- helps when debugging 
 nnoremap <F5> :let g:autoformat_verbosemode=1<CR>:Autoformat<CR>:let g:autoformat_verbosemode=0<CR>
 
-" let my_filetypes = ['bzl', 'c', 'cpp', 'go']
-let my_filetypes = ['bzl', 'go']
-let cpp_filetypes = ['c', 'cpp']
-autocmd BufWrite * if index(my_filetypes, &ft) >= 0 | :Autoformat | else | if index(cpp_filetypes, &ft) >= 0 | :ClangFormat
+" Call ClangFormat on c/c++ files, and Autoformat on the rest, whenever we
+" save a file.
+let g:do_autoformat = 1
+let g:my_filetypes = ['bzl', 'go', 'sh', 'bash', 'py', 'python', 'gn']
+let g:cpp_filetypes = ['c', 'cpp']
+let g:spaces_only_filetypes = ['cfg']
+
+function! TryAutoformat()
+    if g:do_autoformat == 0
+        return
+    elseif index(g:my_filetypes, &ft) >= 0
+        :Autoformat
+    elseif index(g:cpp_filetypes, &ft) >= 0
+        :ClangFormat
+    elseif index(g:spaces_only_filetypes, &ft) >= 0
+        :RemoveTrailingSpaces
+    endif
+endfunction
+
+autocmd BufWrite * call TryAutoformat()
+
+
 let g:formatterpath = ['/usr/local/bin/']
+" Disable some automatic format for unknown files, since it breaks some
+" filetypes. You can manually call `:RemoveTrailingSpaces` to remove trailing
+" spaces if you'd like.
 let g:autoformat_autoindent = 0
 let g:autoformat_retab = 0
 let g:autoformat_remove_trailing_spaces = 0
@@ -453,7 +483,18 @@ let g:formatdef_buildifier = '"buildifier -type=build"'
 let g:formatters_go = ['gofmt']
 let g:formatdef_gofmt = '"gofmt"'
 " Python
-let g:formatters_python = ['black']
+let g:formatters_python = ['yapf']
+" Yapf formatdef moved to bd.vim
+" let g:formatdef_black = '"black -q -l 100 - "'
+" Bash
+let g:formatters_sh = ['shfmt']
+let g:formatters_bash = ['shfmt']
+let g:formatdef_shfmt = '"shfmt -i 4 -ci -bn -sr"'
+" GN
+let g:formatters_gn = ['gnformat']
+let g:formatdef_gnformat = '"gn format --stdin"'
+" Typsecript
+let g:formatters_typescript = ['prettier']
 
 "===============================================================================
 " VIM-RESURRECT
@@ -470,12 +511,27 @@ let g:resurrect_ignore_patterns = [
 " FINDING FILES -- CTRLPVIM/CTRLP.VIM
 "===============================================================================
 let g:ctrlp_max_files=0
-if executable('ag')
-  " Use Ag over Grep
-  set grepprg=ag\ --nogroup\ --nocolor
+" NOTE: Ctrlp user command moved to bd.vim
+let g:ctrlp_cmd='CtrlP '
+let g:ctrlp_working_path_mode = ''
 
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-endif
-let g:ctrlp_cmd='CtrlP /bdi/rt/robots/fleet'
-let g:ctrlp_working_path_mode = 'c'
+
+"========================
+" Git diffing command
+"========================
+command! -nargs=? Greview call s:greview(<f-args>)
+function! s:greview(...)
+  split
+  execute 'Git! diff --diff-filter=AM ' . get(a:, 1, 'origin/master')
+  setlocal buftype=nofile bufhidden=wipe noswapfile
+  setlocal foldmethod=syntax foldtext=fugitive#Foldtext()
+endfunction
+
+nnoremap <leader>gd :Gdiffsplit!<CR>
+
+"================================================
+" a.vim: Alternating between header and source
+"================================================
+let g:alternateSearchPath = 'sfr:../source,sfr:../src,sfr:../include,sfr:../,sfr:./src/'
+let g:alternateNoDefaultAlternate = 1
+let g:alternateExtensions_hpp = "cpp,c,h,impl.hpp"

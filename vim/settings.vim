@@ -14,23 +14,28 @@ set cindent " Intelligently dedent / indent new lines based on rules.
 
 " Turn on spell check!
 " set spellfile=$HOME/.vim/spell/en.utf8.add
-autocmd Filetype python,cpp,c setlocal spell
+autocmd! Filetype python setlocal spell
 
-" if $MOBILE_ROBOTICS_MODE_ENABLED
-"     autocmd Filetype python setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
-" else
-autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
-" endif
+" 2-space files
+autocmd! Filetype xml,yaml,proto       setlocal expandtab   tabstop=2 shiftwidth=2 softtabstop=2
+autocmd! Filetype proto       setlocal expandtab   tabstop=2 shiftwidth=2 softtabstop=2 commentstring=//\ %s
+" For go and cfg files, don't display tabs as the double arrows. Display them as
+" (escaped) spaces instead
+autocmd! Filetype go     setlocal noexpandtab listchars=tab:\ \ ,trail:·,extends:↪,precedes:↩
+" Don't put # at the start of lines
+autocmd! Filetype cfg    setlocal noexpandtab nosmartindent cindent cinkeys-=0# cinkeys+=struct indentkeys-=0# listchars=tab:\ \ ,trail:·,extends:↪,precedes:↩  commentstring=#\ %s
 
-autocmd Filetype java   setlocal expandtab   tabstop=4 shiftwidth=4 softtabstop=4
-autocmd Filetype ocaml  setlocal expandtab   tabstop=4 shiftwidth=4 softtabstop=4
-autocmd Filetype go     setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4
-autocmd Filetype xml    setlocal expandtab   tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype yaml   setlocal expandtab   tabstop=2 shiftwidth=2 softtabstop=2
-autocmd Filetype sh     setlocal expandtab   tabstop=2 shiftwidth=2 softtabstop=2
+au! FileType matlab setlocal commentstring=\%\ %s
+au! FileType c,cpp setlocal commentstring=//\ %s spell
+au! FileType cs,java setlocal commentstring=//\ %s
+au! FileType ocaml setlocal commentstring=(*\ %s\ *)
+au! FileType textproto setlocal commentstring=#\ %s
+" Testing out whether this nosmartindent will fix tabbing issues with comments
+" in text files.
+au! FileType text setlocal commentstring=#\ %s nosmartindent
 
 " Make vim windows resize when the window resizes
-autocmd VimResized * wincmd =
+autocmd! VimResized * wincmd =
 
 augroup ros_format
     au!
@@ -38,6 +43,8 @@ augroup ros_format
     autocmd BufEnter *.launch set filetype=xml
     autocmd BufEnter *.rviz   set filetype=yaml
 augroup end
+
+" autocmd BufRead,BufNewFile *.launch setfiletype roslaunch
 
 " We have VCS -- we don't need this stuff.
 set nobackup " We have vcs, we don't need backups.
@@ -112,9 +119,6 @@ set list
 " set listchars=tab:»·,trail:·
 " set listchars=tab:»·,eol:¬,trail:·,extends:↪,precedes:↩
 set listchars=tab:»·,trail:·,extends:↪,precedes:↩
-" For go files, don't display tabs as the double arrows. Display them as
-" (escaped) spaces instead
-autocmd Filetype go     setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4 listchars=tab:\ \ ,trail:·,extends:↪,precedes:↩
 
 " Always show tabs (avoids frequent window resizing)
 set showtabline=2 
@@ -170,7 +174,7 @@ if &term =~ '^xterm\\|rxvt'
   let &t_SI .= "\<Esc>[4 q"
 endif
 
-autocmd GUIEnter * set visualbell t_vb=
+autocmd! GUIEnter * set visualbell t_vb=
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups and undo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -234,7 +238,7 @@ if has('arabic')
 endif
 
 "Set current working directory to change on window enter.
-autocmd BufEnter * silent! lcd %:p:h
+autocmd! BufEnter * silent! lcd %:p:h
 
 " Disable parentheses matching depends on system. This way we should address all cases (?)
 if has('unix')
@@ -255,7 +259,7 @@ end
 "     " - Add the event _only_ if matchparen is enabled.
 "     " - Event must be added _after_ matchparen loaded (so we can react to w:paren_hl_on).
 "     autocmd CursorMoved * if exists("#matchparen#CursorMoved") | call <sid>matchparen_cursorcolumn_setup() | endif
-"           \ | autocmd! matchparen_cursorcolumn_setup
+"           \ | autocmd matchparen_cursorcolumn_setup
 "   augroup END
 " endif
 
@@ -286,9 +290,3 @@ highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%101v.\+/
 
 " let &colorcolumn=join(range(101,999),",")
-
-" if &filetype ==# 'ocaml'
-"     :echom "should work"
-" else
-"     :echom &filetype
-" end
