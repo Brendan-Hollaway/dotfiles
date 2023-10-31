@@ -19,4 +19,6 @@ cp ~/dotfiles/tmux/.tmux.conf.no_autoload ~/.
 # cp ~/dotfiles/.bashrc ~/.
 
 # Install powerline fonts
+# TODO(bhollaway): I don't think this does anything, but the apt-get definitely works
 mkdir -p ~/.local/share/fonts cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+sudo apt-get install fonts-powerline
