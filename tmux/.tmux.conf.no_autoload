@@ -136,20 +136,25 @@ bind-key C-v run "tmux set-buffer \"$(xclip -o -sel clipboard)\"; tmux paste-buf
 #--------------------------------------------------------------------------------
 
 # Left shows the session name, in blue
-set-option -g status-left-bg default
-set-option -g status-left-fg colour74
 
-set -g window-status-current-bg white
-set -g window-status-current-fg black
-set -g window-status-current-attr bold
+set -g status-left-style bg=default,fg=colour74
+# set-option -g status-left-bg default
+# set-option -g status-left-fg colour74
+
+set -g window-status-current-style bg=white,fg=black,bold
+# set -g window-status-current-bg white
+# set -g window-status-current-fg black
+# set -g window-status-current-attr bold
 
 #-----------------------------------------------------------------
 
-set -g status-fg green
+# set -g status-fg green
+set -g status-style fg=green
 
 # tmuxline.conf was created via tmuxline.vim plugin via TmuxlineSnapshot after
 # we selected a theme there. Last selected theme was 'nightly_fox'.
 if-shell "test -f ~/dotfiles/tmux/tmuxline.conf" "source ~/dotfiles/tmux/tmuxline.conf"
+# if-shell "test -f ~/.tmuxline_new" "source ~/.tmuxline_new"
 
 #=================================================================
 
