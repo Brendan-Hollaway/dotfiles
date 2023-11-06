@@ -8,6 +8,8 @@ $include /etc/inputrc
 "\e[3;5~": kill-word
 "\e[OH": beginning-of-line
 "\e[OF": end-of-line
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
 
 set colored-stats On
 set completion-ignore-case On
